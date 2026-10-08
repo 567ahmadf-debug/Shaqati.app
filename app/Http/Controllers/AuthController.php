@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
@@ -53,7 +54,8 @@ class AuthController extends Controller
     }
 
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $token = $request->user()->currentAccessToken();
 
         if ($token) {
@@ -65,5 +67,36 @@ class AuthController extends Controller
         ]);
     }
 
-    
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $user = $request->user();
+
+        $data = $request->validated();
+
+        if (!Hash::check(
+            $data['current_password'],
+            $user->password
+        )) {
+            return response()->json([
+                'message' => 'Current password is incorrect.',
+            ], 422);
+        }
+
+        $user->update([
+            'password' => Hash::make($data['password']),
+        ]);
+
+        // احذف كل التوكنز، ما عدا التوكن الذي يستخدمه هذا الطلب حالياً
+        $user->tokens()
+            ->where(
+                'id',
+                '!=',
+                $request->user()->currentAccessToken()->id
+            )
+            ->delete();
+
+        return response()->json([
+            'message' => 'Password changed successfully.',
+        ]);
+    }
 }
