@@ -15,7 +15,34 @@ class User extends Authenticatable implements MustVerifyEmail
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
     use SoftDeletes;
-    use HasApiTokens ; 
+    use HasApiTokens;
+
+
+    public const ROLE_TENANT = 'tenant';
+
+    public const ROLE_LANDLORD = 'landlord';
+
+    public const ROLE_ADMIN = 'admin';
+
+    public function isTenant(): bool
+    {
+        return $this->role === self::ROLE_TENANT;
+    }
+
+    public function isLandlord(): bool
+    {
+        return $this->role === self::ROLE_LANDLORD;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function hasRole(string ...$roles): bool
+    {
+        return in_array($this->role, $roles, true);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -197,6 +224,4 @@ class User extends Authenticatable implements MustVerifyEmail
             'landlord_id'
         );
     }
-
-
 }
