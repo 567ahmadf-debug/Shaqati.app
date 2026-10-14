@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('avatar_path')->nullable() ; 
             $table->string('bio')->nullable() ; 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
