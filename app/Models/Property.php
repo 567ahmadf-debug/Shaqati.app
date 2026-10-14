@@ -10,7 +10,6 @@ class Property extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'landlord_id',
         'title',
         'description',
         'property_type',
@@ -23,8 +22,6 @@ class Property extends Model
         'city',
         'latitude',
         'longitude',
-        'status',
-        'availability_status',
     ];
 
     protected $casts = [
