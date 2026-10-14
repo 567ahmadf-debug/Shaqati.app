@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminPropertyController;
+use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -67,3 +69,19 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
+
+////                            ADMIN                           ////
+
+Route::middleware(['auth:sanctum', 'role:admin'])
+    ->prefix('admin')
+    ->group(function () {
+        Route::patch(
+            '/properties/{property}/approve',
+            [AdminPropertyController::class, 'approve']
+        );
+
+        Route::patch(
+            '/users/{user}/suspend',
+            [AdminUserController::class, 'suspend']
+        );
+    });

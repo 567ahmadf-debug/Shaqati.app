@@ -25,4 +25,9 @@ class PropertyPolicy
         return $user->role === 'landlord'
             && (int) $property->landlord_id === (int) $user->id;
     }
+
+    public function moderate(User $user, Property $property): bool
+    {
+        return $user->isAdmin();
+    }
 }
