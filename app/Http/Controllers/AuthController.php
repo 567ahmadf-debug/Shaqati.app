@@ -49,11 +49,19 @@ class AuthController extends Controller
 
         $user = User::where('email', $data['email'])->first();
 
+
+
         if (! $user || ! Hash::check($data['password'], $user->password)) {
 
             return response()->json([
                 'message' => 'Invalid credentials.',
             ], 401);
+        }
+
+        if ($user->isSuspended()) {
+            return response()->json([
+                'message' => 'Your account is suspended.',
+            ], 403);
         }
 
         $token = $user->createToken('mobile-app')->plainTextToken;

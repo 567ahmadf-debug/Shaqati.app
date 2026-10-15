@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Nette\Schema\Message;
+use App\Models\Message;
 
 class Conversation extends Model
 {

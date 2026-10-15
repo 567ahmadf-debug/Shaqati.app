@@ -18,7 +18,7 @@ Route::post('/login', [AuthController::class, 'login'])
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
     ->middleware('throttle:5,1');
 
-    
+
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])
     ->middleware('throttle:10,1');
 
@@ -30,7 +30,10 @@ Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
 
 
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware([
+    'auth:sanctum',
+    'account.active',
+])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -52,9 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
             'email' => $request->user()->email,
             'email_verified_at' => $request->user()->email_verified_at,
             'profile_completed' => $request->user()->profile_completed,
-            
-        ]);
 
+        ]);
     });
 
 
@@ -63,18 +65,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update']);
 
     Route::delete('/profile', [ProfileController::class, 'destroy']);
-
-
-
 });
 
 
 
 ////                            ADMIN                           ////
 
-Route::middleware(['auth:sanctum', 'role:admin'])
+Route::middleware([
+    'auth:sanctum',
+    'account.active',
+    'role:admin',
+])
     ->prefix('admin')
     ->group(function () {
+        
         Route::patch(
             '/properties/{property}/approve',
             [AdminPropertyController::class, 'approve']
