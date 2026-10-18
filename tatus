@@ -1,0 +1,30 @@
+[1mdiff --git a/database/migrations/2026_10_15_112458_add_suspended_at_to_users_table.php b/database/migrations/2026_10_15_112458_add_suspended_at_to_users_table.php[m
+[1mdeleted file mode 100644[m
+[1mindex 0394c35..0000000[m
+[1m--- a/database/migrations/2026_10_15_112458_add_suspended_at_to_users_table.php[m
+[1m+++ /dev/null[m
+[36m@@ -1,24 +0,0 @@[m
+[31m-[m
+[31m-<?php[m
+[31m-[m
+[31m-use Illuminate\Database\Migrations\Migration;[m
+[31m-use Illuminate\Database\Schema\Blueprint;[m
+[31m-use Illuminate\Support\Facades\Schema;[m
+[31m-[m
+[31m-return new class extends Migration[m
+[31m-{[m
+[31m-    public function up(): void[m
+[31m-    {[m
+[31m-        Schema::table('users', function (Blueprint $table) {[m
+[31m-            $table->timestamp('suspended_at')->nullable()->index();[m
+[31m-        });[m
+[31m-    }[m
+[31m-[m
+[31m-    public function down(): void[m
+[31m-    {[m
+[31m-        Schema::table('users', function (Blueprint $table) {[m
+[31m-            $table->dropIndex(['suspended_at']);[m
+[31m-            $table->dropColumn('suspended_at');[m
+[31m-        });[m
+[31m-    }[m
+[31m-};[m
