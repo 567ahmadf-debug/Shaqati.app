@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminPropertyController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -48,15 +49,7 @@ Route::middleware([
 
 
     Route::get('/user', function (Request $request) {
-
-        return response()->json([
-            'id' => $request->user()->id,
-            'name' => $request->user()->name,
-            'email' => $request->user()->email,
-            'email_verified_at' => $request->user()->email_verified_at,
-            'profile_completed' => $request->user()->profile_completed,
-
-        ]);
+        return new UserResource($request->user());
     });
 
 
@@ -78,7 +71,7 @@ Route::middleware([
 ])
     ->prefix('admin')
     ->group(function () {
-        
+
         Route::patch(
             '/properties/{property}/approve',
             [AdminPropertyController::class, 'approve']

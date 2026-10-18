@@ -7,6 +7,7 @@ use App\Models\Profile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\ProfileResource;
 
 class ProfileController extends Controller
 {
@@ -16,28 +17,26 @@ class ProfileController extends Controller
 
         return response()->json([
             'profile_completed' => (bool) $user->profile_completed,
-            'profile' => $user->profile,
+            'profile' => $user->profile
+                ? new ProfileResource($user->profile)
+                : null,
         ]);
     }
 
-    public function update(UpdateProfileRequest $request): JsonResponse 
+    public function update(UpdateProfileRequest $request): JsonResponse
     {
         $user = $request->user();
         $data = $request->validated();
 
-        $profile = DB::transaction(function () use ($user, $data) 
-        {
+        $profile = DB::transaction(function () use ($user, $data) {
             // استرجاع الملف حتى لو كان محذوفاً حذفاً ناعماً.
             $profile = $user->profile()
                 ->withTrashed()
                 ->first();
 
-            if ($profile === null) 
-            {
+            if ($profile === null) {
                 $profile = $user->profile()->make();
-            } 
-            elseif ($profile->trashed()) 
-            {
+            } elseif ($profile->trashed()) {
                 $profile->restore();
             }
 
@@ -49,14 +48,14 @@ class ProfileController extends Controller
             $user->save();
 
             return $profile;
-
         });
 
         return response()->json([
             'message' => 'Profile updated successfully.',
-            'profile_completed' => (bool) ($user->fresh()->profile_completed),
-            'profile' => $profile,
+            'profile_completed' => (bool) $user->fresh()->profile_completed,
+            'profile' => new ProfileResource($profile),
         ]);
+        
     }
 
 
