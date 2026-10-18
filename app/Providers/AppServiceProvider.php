@@ -43,8 +43,13 @@ class AppServiceProvider extends ServiceProvider
                 trim((string) $request->input('email', ''))
             );
 
-            return Limit::perMinute(5)
-                ->by($request->ip() . '|' . $email);
+            return [
+                Limit::perMinute(5)
+                    ->by($request->ip() . '|' . $email),
+
+                Limit::perMinute(20)
+                    ->by('login-ip:' . $request->ip()),
+            ];
         });
     }
 }
