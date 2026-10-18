@@ -4,7 +4,12 @@ namespace App\Providers;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +37,14 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
         );
+
+        RateLimiter::for('login', function (Request $request) {
+            $email = Str::lower(
+                trim((string) $request->input('email', ''))
+            );
+
+            return Limit::perMinute(5)
+                ->by($request->ip() . '|' . $email);
+        });
     }
 }
-

@@ -13,7 +13,7 @@ Route::post('/register', [AuthController::class, 'register'])
 
 
 Route::post('/login', [AuthController::class, 'login'])
-    ->middleware('throttle:5,1');
+    ->middleware('throttle:login');
 
 
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
