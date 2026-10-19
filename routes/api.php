@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminPropertyController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\PropertyController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -82,3 +83,13 @@ Route::middleware([
             [AdminUserController::class, 'suspend']
         );
     });
+
+
+// --------------------- landlord ---------------------
+
+Route::middleware('role:landlord')->group(function () {
+    Route::post(
+        '/properties',
+        [ProfileController::class, 'store']
+    );
+});
