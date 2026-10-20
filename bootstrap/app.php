@@ -1,12 +1,11 @@
 <?php
-namespace Tests\Feature; 
+
 use App\Http\Middleware\EnsureUserHasRole;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\EnsureUserIsNotSuspended;
 use Illuminate\Http\Request;
-use Throwable;
 
 
 
