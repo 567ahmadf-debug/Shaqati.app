@@ -60,8 +60,8 @@ Route::middleware([
 });
 
 
-
-
+Route::get('/properties/{property}', [PropertyController::class, 'show'])
+    ->whereNumber('property');
 
 
 // --- Admin Routes ---

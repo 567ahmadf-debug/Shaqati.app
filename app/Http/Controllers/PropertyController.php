@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\PropertyResource;
 use App\Http\Requests\StorePropertyRequest;
 use App\Http\Requests\UpdatePropertyRequest;
@@ -47,6 +48,14 @@ class PropertyController extends Controller
 
         return response()->json([
             'message' => 'Property deleted successfully.',
+        ]);
+    }
+    public function show(Request $request, Property $property): JsonResponse
+    {
+        Gate::authorize('view', $property);
+
+        return response()->json([
+            'data' => new PropertyResource($property),
         ]);
     }
 }
