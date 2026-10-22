@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -57,16 +58,10 @@ class Property extends Model
         return $this->hasMany(Conversation::class);
     }
 
-
-
-
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
     }
-
-
-
 
     public function favoritedBy()
     {
@@ -80,5 +75,23 @@ class Property extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function scopeApproved(Builder $query): void
+    {
+        $query->where('status', 'approved');
+    }
+
+
+    public function scopeSearch(Builder $query, ?string $term): void
+    {
+        $term = trim($term ?? '');
+
+        if ($term !== '') {
+            $query->where(function (Builder $builder) use ($term) {
+                $builder->where('title', 'like', "%{$term}%")
+                      ->orWhere('city', 'like', "%{$term}%");
+            });
+        }
     }
 }

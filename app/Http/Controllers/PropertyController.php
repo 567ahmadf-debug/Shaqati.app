@@ -58,4 +58,26 @@ class PropertyController extends Controller
             'data' => new PropertyResource($property),
         ]);
     }
+
+    public function index(Request $request): JsonResponse
+    {
+        // 1. التحقق من المدخلات
+        $validated = $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        // 2. جلب البيانات باستخدام الـ Scopes
+        $properties = Property::query()
+            ->approved()
+            ->search($validated['search'] ?? null)
+            ->latest() // بديل مختصر لـ orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit(20)
+            ->get();
+
+        // 3. إرجاع الاستجابة
+        return response()->json([
+            'data' => PropertyResource::collection($properties),
+        ]);
+    }
 }
