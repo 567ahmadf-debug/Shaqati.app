@@ -11,6 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\ListPropertiesRequest;
 use App\Services\Properties\ListPropertiesService;
+use App\Services\Properties\SubmitPropertyForReviewService;
+
 
 class PropertyController extends Controller
 {
@@ -72,5 +74,18 @@ class PropertyController extends Controller
 
         return PropertyResource::collection($properties)
             ->response();
+    }
+
+
+    public function submitForReview(Property $property, SubmitPropertyForReviewService $service): JsonResponse
+    {
+        Gate::authorize('update', $property);
+
+        $property = $service->execute($property);
+
+        return response()->json([
+            'message' => 'Property submitted for review successfully.',
+            'data' => new PropertyResource($property),
+        ]);
     }
 }

@@ -33,8 +33,8 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Account created successfully. Please verify your email.',
-            'user' => new UserResource($data),
-        ]);
+            'user' => new UserResource($user),
+        ],201);
     }
 
     public function login(LoginRequest $request)
@@ -63,7 +63,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Login successful.',
             'token' => $token,
-            'user' => new UserResource($data)
+            'user' => new UserResource($user)
         ]);
     }
 

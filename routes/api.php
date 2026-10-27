@@ -111,4 +111,9 @@ Route::middleware([
         '/properties/{property}',
         [PropertyController::class, 'destroyProperty']
     );
+
+    Route::post(
+        '/properties/{property}/submit-for-review',
+        [PropertyController::class, 'submitForReview']
+    );
 });

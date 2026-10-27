@@ -12,6 +12,18 @@ class Property extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const STATUS_DRAFT = 'draft';
+
+    public const STATUS_PENDING_REVIEW = 'pending_review';
+
+    public const STATUS_APPROVED = 'approved';
+
+    public const STATUS_REJECTED = 'rejected';
+
+    public const AVAILABILITY_AVAILABLE = 'available';
+
+    public const AVAILABILITY_UNAVAILABLE = 'unavailable';
+
     protected $fillable = [
         'title',
         'description',
@@ -82,7 +94,7 @@ class Property extends Model
 
     public function scopeApproved(Builder $query): Builder
     {
-        return $query->where('status', 'approved');
+        return $query->where('status', self::STATUS_APPROVED);
     }
 
     public function scopeSearch(Builder $query, ?string $term): Builder
