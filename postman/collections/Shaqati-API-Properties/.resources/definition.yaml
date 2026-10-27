@@ -1,0 +1,3 @@
+$kind: collection
+name: 'Shaqati API - Properties'
+description: 'Property management endpoints for the Shaqati API'

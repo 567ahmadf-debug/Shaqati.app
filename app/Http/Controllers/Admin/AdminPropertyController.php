@@ -17,8 +17,8 @@ class AdminPropertyController extends Controller
         Gate::authorize('moderate', $property);
 
         return DB::transaction(function () use ($property) {
-            // إعادة قراءة العقار داخل المعاملة لمنع الاعتماد
-            // اعتمادًا على حالة قديمة.
+
+        
             $property = Property::query()
                 ->lockForUpdate()
                 ->findOrFail($property->id);

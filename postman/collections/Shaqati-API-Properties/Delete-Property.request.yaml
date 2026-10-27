@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Delete Property'
+method: DELETE
+url: '{{base_url}}/api/properties/{{property_id}}'
+order: 5000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{token}}'

@@ -25,13 +25,15 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
     ->middleware('throttle:5,1');
 
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])
-    ->middleware('throttle:10,1');
+    ->middleware('throttle:5,1');
 
 Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
     ->middleware(['signed', 'throttle:6,1'])
     ->name('verification.verify');
 
 
+Route::get('/properties/{property}', [PropertyController::class, 'showAllProperties'])
+    ->whereNumber('property');
 
 
 // --- Authenticated User Routes ---
@@ -45,26 +47,21 @@ Route::middleware([
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);
 
-    Route::post('/email/verification-notification', [
-        AuthController::class,
-        'resendVerificationEmail',
-    ])->middleware('throttle:6,1');
+    Route::post('/email/verification-notification', [AuthController::class, 'resendVerificationEmail',])
+        ->middleware('throttle:6,1');
 
-    Route::get('/user', function (Request $request) {
-        return new UserResource($request->user());
-    });
+    Route::get('/user', [ProfileController::class, 'showInfoUser']);
 
-    Route::get('/profile', [ProfileController::class, 'show']);
-    Route::put('/profile', [ProfileController::class, 'update']);
-    Route::delete('/profile', [ProfileController::class, 'destroy']);
+    Route::get('/profile', [ProfileController::class, 'showProfile']);
+    Route::put('/profile', [ProfileController::class, 'updateProfile']);
+    Route::delete('/profile', [ProfileController::class, 'destroyProfile']);
 });
 
 
 
-Route::get('/properties', [PropertyController::class, 'index']);
+Route::get('/properties', [PropertyController::class, 'indexProperty']);
 
-Route::get('/properties/{property}', [PropertyController::class, 'show'])
-    ->whereNumber('property');
+
 
 // --- Admin Routes ---
 
@@ -90,8 +87,6 @@ Route::middleware([
 
 
 
-
-
 // --- Landlord Routes ---
 
 
@@ -104,16 +99,16 @@ Route::middleware([
 
     Route::post(
         '/properties',
-        [PropertyController::class, 'store']
+        [PropertyController::class, 'storeProperty']
     );
 
     Route::put(
         '/properties/{property}',
-        [PropertyController::class, 'update']
+        [PropertyController::class, 'updateProperty']
     );
 
     Route::delete(
         '/properties/{property}',
-        [PropertyController::class, 'destroy']
+        [PropertyController::class, 'destroyProperty']
     );
 });

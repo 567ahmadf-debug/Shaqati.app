@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'List Properties'
+method: GET
+url: '{{base_url}}/api/properties'
+order: 1000
+queryParams:
+  - key: search
+    value: ''
+    disabled: true
+    description: 'Optional search term (max 100 chars)'

@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Approve Property'
+method: PATCH
+url: '{{base_url}}/api/admin/properties/{{property_id}}/approve'
+order: 1000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{token}}'

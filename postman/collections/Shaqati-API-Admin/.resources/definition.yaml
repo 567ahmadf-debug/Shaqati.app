@@ -1,0 +1,3 @@
+$kind: collection
+name: 'Shaqati API - Admin'
+description: 'Admin-only endpoints for the Shaqati API. Requires admin role.'

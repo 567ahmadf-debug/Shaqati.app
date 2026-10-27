@@ -1,0 +1,21 @@
+$kind: http-request
+name: 'Update Property'
+method: PUT
+url: '{{base_url}}/api/properties/{{property_id}}'
+order: 4000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{token}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Updated Apartment Title",
+      "rental_price": 2800.00,
+      "description": "Updated description for the property."
+    }

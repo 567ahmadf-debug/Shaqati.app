@@ -8,10 +8,17 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ProfileResource;
+use App\Http\Resources\UserResource;
 
 class ProfileController extends Controller
 {
-    public function show(Request $request): JsonResponse
+
+    public function showInfoUser(Request $request)
+    {
+        return new UserResource($request->user());
+    }
+
+    public function showProfile(Request $request): JsonResponse
     {
         $user = $request->user();
 
@@ -23,7 +30,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(UpdateProfileRequest $request): JsonResponse
+    public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {
         $user = $request->user();
         $data = $request->validated();
@@ -55,11 +62,10 @@ class ProfileController extends Controller
             'profile_completed' => (bool) $user->fresh()->profile_completed,
             'profile' => new ProfileResource($profile),
         ]);
-        
     }
 
 
-    public function destroy(Request $request): JsonResponse
+    public function destroyProfile(Request $request): JsonResponse
     {
         $user = $request->user();
         $profile = $user->profile;

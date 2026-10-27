@@ -1,0 +1,30 @@
+$kind: http-request
+name: 'Create Property'
+method: POST
+url: '{{base_url}}/api/properties'
+order: 3000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{token}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Spacious 2BR Apartment in Riyadh",
+      "description": "A beautiful and spacious 2-bedroom apartment located in the heart of Riyadh.",
+      "property_type": "apartment",
+      "rental_price": 2500.00,
+      "currency": "SAR",
+      "area": 120.50,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "address": "123 King Fahd Road",
+      "city": "Riyadh",
+      "latitude": 24.7136,
+      "longitude": 46.6753
+    }

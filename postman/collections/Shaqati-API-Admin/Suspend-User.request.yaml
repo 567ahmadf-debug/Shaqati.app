@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Suspend User'
+method: PATCH
+url: '{{base_url}}/api/admin/users/{{user_id}}/suspend'
+order: 2000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{token}}'

@@ -1,0 +1,20 @@
+$kind: http-request
+name: 'Update Profile'
+method: PUT
+url: '{{base_url}}/api/profile'
+order: 2000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{token}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nickname": "Ahmad",
+      "bio": "A passionate landlord based in Riyadh."
+    }

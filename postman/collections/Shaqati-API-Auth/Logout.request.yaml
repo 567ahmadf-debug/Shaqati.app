@@ -1,0 +1,10 @@
+$kind: http-request
+name: Logout
+method: POST
+url: '{{base_url}}/api/logout'
+order: 3000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{token}}'

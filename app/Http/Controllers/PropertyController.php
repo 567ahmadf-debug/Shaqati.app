@@ -9,10 +9,12 @@ use App\Http\Requests\UpdatePropertyRequest;
 use App\Models\Property;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\ListPropertiesRequest;
+use App\Services\Properties\ListPropertiesService;
 
 class PropertyController extends Controller
 {
-    public function store(StorePropertyRequest $request): JsonResponse
+    public function storeProperty(StorePropertyRequest $request): JsonResponse
     {
 
         $property = $request->user()
@@ -25,7 +27,7 @@ class PropertyController extends Controller
         ], 201);
     }
 
-    public function update(UpdatePropertyRequest $request, Property $property): JsonResponse
+    public function updateProperty(UpdatePropertyRequest $request, Property $property): JsonResponse
     {
 
         Gate::authorize('update', $property);
@@ -39,7 +41,7 @@ class PropertyController extends Controller
         ]);
     }
 
-    public function destroy(Property $property): JsonResponse
+    public function destroyProperty(Property $property): JsonResponse
     {
 
         Gate::authorize('delete', $property);
@@ -49,8 +51,11 @@ class PropertyController extends Controller
         return response()->json([
             'message' => 'Property deleted successfully.',
         ]);
+
     }
-    public function show(Request $request, Property $property): JsonResponse
+
+    
+    public function showAllProperties(Request $request, Property $property): JsonResponse
     {
         Gate::authorize('view', $property);
 
@@ -59,23 +64,12 @@ class PropertyController extends Controller
         ]);
     }
 
-    public function index(Request $request): JsonResponse
+    public function indexProperty(ListPropertiesRequest $request, ListPropertiesService $service): JsonResponse
     {
-        // 1. التحقق من المدخلات
-        $validated = $request->validate([
-            'search' => ['nullable', 'string', 'max:100'],
-        ]);
+        $properties = $service->execute(
+            $request->validated('search')
+        );
 
-        // 2. جلب البيانات باستخدام الـ Scopes
-        $properties = Property::query()
-            ->approved()
-            ->search($validated['search'] ?? null)
-            ->latest() // بديل مختصر لـ orderByDesc('created_at')
-            ->orderByDesc('id')
-            ->limit(20)
-            ->get();
-
-        // 3. إرجاع الاستجابة
         return response()->json([
             'data' => PropertyResource::collection($properties),
         ]);

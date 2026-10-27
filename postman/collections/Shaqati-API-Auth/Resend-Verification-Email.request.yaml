@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Resend Verification Email'
+method: POST
+url: '{{base_url}}/api/email/verification-notification'
+order: 8000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{token}}'

@@ -7,6 +7,7 @@ use App\Http\Requests\AuthRequest\ForgotPasswordRequest;
 use App\Http\Requests\AuthRequest\LoginRequest;
 use App\Http\Requests\AuthRequest\RegisterRequest;
 use App\Http\Requests\AuthRequest\ResetPasswordRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
@@ -32,14 +33,8 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Account created successfully. Please verify your email.',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'email_verified_at' => $user->email_verified_at,
-                'profile_completed' => $user->profile_completed,
-            ],
-        ], 201);
+            'user' => new UserResource($data),
+        ]);
     }
 
     public function login(LoginRequest $request)
@@ -48,7 +43,6 @@ class AuthController extends Controller
         $data = $request->validated();
 
         $user = User::where('email', $data['email'])->first();
-
 
 
         if (! $user || ! Hash::check($data['password'], $user->password)) {
@@ -69,13 +63,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Login successful.',
             'token' => $token,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'email_verified_at' => $user->email_verified_at,
-                'profile_completed' => $user->profile_completed,
-            ],
+            'user' => new UserResource($data)
         ]);
     }
 

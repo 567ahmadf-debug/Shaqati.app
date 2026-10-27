@@ -51,7 +51,6 @@ class AdminUserController extends Controller
             $lockedUser->suspended_at = now();
             $lockedUser->save();
 
-            // إبطال توكنات Sanctum الحالية.
             $lockedUser->tokens()->delete();
 
             $log = new AuditLog();

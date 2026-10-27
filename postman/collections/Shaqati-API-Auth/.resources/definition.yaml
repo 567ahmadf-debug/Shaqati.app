@@ -1,0 +1,3 @@
+$kind: collection
+name: 'Shaqati API - Auth'
+description: 'Authentication endpoints for the Shaqati API'
