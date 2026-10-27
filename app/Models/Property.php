@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Property extends Model
 {
+    use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
@@ -77,21 +79,23 @@ class Property extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function scopeApproved(Builder $query): void
+
+    public function scopeApproved(Builder $query): Builder
     {
-        $query->where('status', 'approved');
+        return $query->where('status', 'approved');
     }
 
-
-    public function scopeSearch(Builder $query, ?string $term): void
+    public function scopeSearch(Builder $query, ?string $term): Builder
     {
         $term = trim($term ?? '');
 
-        if ($term !== '') {
-            $query->where(function (Builder $builder) use ($term) {
-                $builder->where('title', 'like', "%{$term}%")
-                      ->orWhere('city', 'like', "%{$term}%");
-            });
+        if ($term === '') {
+            return $query;
         }
+
+        return $query->where(function (Builder $builder) use ($term) {
+            $builder->where('title', 'like', "%{$term}%")
+                ->orWhere('city', 'like', "%{$term}%");
+        });
     }
 }

@@ -13,17 +13,71 @@ class ListPropertiesRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if (is_string($this->input('search'))) {
-            $this->merge([
-                'search' => trim($this->input('search')),
-            ]);
+        $stringFields = [
+            'search',
+            'city',
+            'property_type',
+            'availability_status',
+        ];
+
+        $normalized = [];
+
+        foreach ($stringFields as $field) {
+            $value = $this->input($field);
+
+            if (is_string($value)) {
+                $normalized[$field] = trim($value);
+            }
         }
+
+        $this->merge($normalized);
     }
 
     public function rules(): array
     {
         return [
-            'search' => ['sometimes', 'string', 'max:100'],
+            'search' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'max:100',
+            ],
+
+            'city' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'max:100',
+            ],
+
+            'property_type' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'max:50',
+            ],
+
+            'availability_status' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'max:30',
+            ],
+
+            'min_price' => [
+                'sometimes',
+                'nullable',
+                'numeric',
+                'min:0',
+            ],
+
+            'max_price' => [
+                'sometimes',
+                'nullable',
+                'numeric',
+                'min:0',
+                'gte:min_price',
+            ],
         ];
     }
 }

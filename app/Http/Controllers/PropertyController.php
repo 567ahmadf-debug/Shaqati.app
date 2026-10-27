@@ -51,10 +51,9 @@ class PropertyController extends Controller
         return response()->json([
             'message' => 'Property deleted successfully.',
         ]);
-
     }
 
-    
+
     public function showAllProperties(Request $request, Property $property): JsonResponse
     {
         Gate::authorize('view', $property);
@@ -67,7 +66,7 @@ class PropertyController extends Controller
     public function indexProperty(ListPropertiesRequest $request, ListPropertiesService $service): JsonResponse
     {
         $properties = $service->execute(
-            $request->validated('search')
+            $request->validated()
         );
 
         return response()->json([
