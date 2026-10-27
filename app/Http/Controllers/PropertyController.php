@@ -63,14 +63,14 @@ class PropertyController extends Controller
         ]);
     }
 
+
     public function indexProperty(ListPropertiesRequest $request, ListPropertiesService $service): JsonResponse
     {
         $properties = $service->execute(
             $request->validated()
         );
 
-        return response()->json([
-            'data' => PropertyResource::collection($properties),
-        ]);
+        return PropertyResource::collection($properties)
+            ->response();
     }
 }

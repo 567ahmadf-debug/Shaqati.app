@@ -3,21 +3,19 @@
 namespace App\Services\Properties;
 
 use App\Models\Property;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListPropertiesService
 {
-    public function execute(array $filters = []): Collection
-    {
+    public function execute(
+        array $filters = []
+    ): LengthAwarePaginator {
         $query = Property::query()
             ->approved()
             ->search($filters['search'] ?? null);
 
         if (!empty($filters['city'])) {
-            $query->where(
-                'city',
-                $filters['city']
-            );
+            $query->where('city', $filters['city']);
         }
 
         if (!empty($filters['property_type'])) {
@@ -56,10 +54,19 @@ class ListPropertiesService
             );
         }
 
+        $sortBy = $filters['sort_by'] ?? 'created_at';
+        $sortDirection = $filters['sort_direction'] ?? 'desc';
+        $perPage = (int) ($filters['per_page'] ?? 20);
+
+        $query->orderBy($sortBy, $sortDirection);
+
+        // ترتيب إضافي ثابت عند تساوي قيمة الترتيب الأساسية.
+        if ($sortBy !== 'id') {
+            $query->orderByDesc('id');
+        }
+
         return $query
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
-            ->limit(20)
-            ->get();
+            ->paginate($perPage)
+            ->withQueryString();
     }
 }

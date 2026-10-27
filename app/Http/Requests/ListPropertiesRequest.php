@@ -18,6 +18,8 @@ class ListPropertiesRequest extends FormRequest
             'city',
             'property_type',
             'availability_status',
+            'sort_by',
+            'sort_direction',
         ];
 
         $normalized = [];
@@ -77,6 +79,31 @@ class ListPropertiesRequest extends FormRequest
                 'numeric',
                 'min:0',
                 'gte:min_price',
+            ],
+
+            'page' => [
+                'sometimes',
+                'integer',
+                'min:1',
+            ],
+
+            'per_page' => [
+                'sometimes',
+                'integer',
+                'min:1',
+                'max:50',
+            ],
+
+            'sort_by' => [
+                'sometimes',
+                'string',
+                'in:created_at,rental_price,area',
+            ],
+
+            'sort_direction' => [
+                'sometimes',
+                'string',
+                'in:asc,desc',
             ],
         ];
     }
